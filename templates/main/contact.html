@@ -1,0 +1,11 @@
+{% extends "main/base.html" %}
+
+{% block content %}
+<h1>{{ title|upper }}</h1>
+
+<p><strong>Adress:</strong> {{ address|default:"No information" }}</p>
+<p><strong>Phone Number:</strong> {{ phone|default:"No information"|lower }}</p>
+<p><strong>E-mail:</strong> {{ email|default:"No e-mail"|safe }}</p>
+
+<p>Contact details available: {{ phone|yesno:"yes,no" }}</p>
+{% endblock %}

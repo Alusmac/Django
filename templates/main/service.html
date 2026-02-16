@@ -1,0 +1,19 @@
+{% extends "main/base.html" %}
+
+{% block content %}
+<h1>{{ title|upper }}</h1>
+
+<p>Date of update: {{ updated|date:"d.m.Y" }}</p>
+
+<p>We have {{ service|length }} services</p>
+
+<ul class="list-group">
+    {% for service in service|slice:":4" %}
+        <li class="list-group-item">
+            <h5>{{ service.name }}</h5>
+            <p>{{ service.description }}</p>
+        </li>
+    {% endfor %}
+</ul>
+
+{% endblock %}

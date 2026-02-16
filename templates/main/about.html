@@ -1,0 +1,11 @@
+{% extends "main/base.html" %}
+
+{% block content %}
+<h1>{{ title|upper }}</h1>
+
+<p>{{ description|truncatechars:80 }}</p>
+
+<p>Date of update: {{ updated|date:"d.m.Y H:i" }}</p>
+
+<p>Сompany is active: {{ is_active|yesno:"yes,no" }}</p>
+{% endblock %}
