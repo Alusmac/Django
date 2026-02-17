@@ -8,7 +8,7 @@
 <p>We have {{ service|length }} services</p>
 
 <ul class="list-group">
-    {% for service in service|slice:":4" %}
+    {% for service in service|slice:":3" %}
         <li class="list-group-item">
             <h5>{{ service.name }}</h5>
             <p>{{ service.description }}</p>
