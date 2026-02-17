@@ -36,41 +36,33 @@ class ContactView(View):
 
 class ServiceView(View):
     def get(self, request: HttpRequest) -> HttpResponse:
-        service = [
-            {"name": "web development", "description": "Create web sites.", "category": "IT"},
-            {"name": "SEO optimization", "description": "Website promotion in search engines.",
-             "category": "Marketing"},
-            {"name": "Analyze", "description": "Consultation and Audit", "category": "Business"},
-            {"name": "UI/UX design", "description": "Design .", "category": "IT"},
+        services = [
+            {"name": "Web development", "description": "Create web sites.", "category": "IT"},
+            {"name": "SEO optimization", "description": "Website promotion in search engines.", "category": "Marketing"},
+            {"name": "Analyze", "description": "Consultation and Audit.", "category": "Business"},
+            {"name": "UI/UX design", "description": "Design.", "category": "IT"},
         ]
 
-        query = request.GET.get("q", "")
-        category = request.GET.get("category", "")
+        query = request.GET.get("q", "").strip()
 
-        filtered_service = service
+        filtered_services = services
 
         if query:
-            filtered_service = [
-                s for s in filtered_service
+            filtered_services = [
+                s for s in services
                 if query.lower() in s["name"].lower()
-                   or query.lower() in s["description"].lower()
-            ]
-
-        if category:
-            filtered_service = [
-                s for s in filtered_service
-                if s["category"] == category
+                or query.lower() in s["description"].lower()
             ]
 
         context = {
             "title": "Services",
-            "service": filtered_service,
-            "updated": datetime.now(),
+            "services": filtered_services,
             "query": query,
-            "selected_category": category,
-            "categories": list(set(s["category"] for s in service)),
+            "categories": list({s["category"] for s in services}),
+            "selected_category": "",
         }
 
         return render(request, "main/service.html", context)
+
 
 # Create your views here.

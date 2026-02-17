@@ -1,19 +1,67 @@
 {% extends "main/base.html" %}
 
+
 {% block content %}
-<h1>{{ title|upper }}</h1>
 
-<p>Date of update: {{ updated|date:"d.m.Y" }}</p>
+<div class="container mt-5">
 
-<p>We have {{ service|length }} services</p>
+    <h1 class="mb-4">{{ title }}</h1>
 
-<ul class="list-group">
-    {% for service in service|slice:":3" %}
-        <li class="list-group-item">
-            <h5>{{ service.name }}</h5>
-            <p>{{ service.description }}</p>
-        </li>
-    {% endfor %}
-</ul>
+    
+    <form method="get" class="row g-3 mb-4">
+
+        
+        <div class="col-md-4">
+            <input 
+                type="text" 
+                name="q" 
+                class="form-control" 
+                placeholder="Search service..."
+                value="{{ query }}"
+            >
+        </div>
+
+        
+        <div class="col-md-4">
+            <select name="category" class="form-select">
+                <option value="">All categories</option>
+                {% for cat in categories %}
+                    <option value="{{ cat }}"
+                        {% if cat == selected_category %}selected{% endif %}>
+                        {{ cat }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+
+        
+        <div class="col-md-4">
+            <button type="submit" class="btn btn-secondary w-100">
+                Search
+            </button>
+        </div>
+
+    </form>
+
+    
+    <div class="row">
+        {% for service in services %}
+            <div class="col-md-6 mb-4">
+                <div class="card shadow-sm h-100">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ service.name }}</h5>
+                        <p class="card-text">{{ service.description }}</p>
+                        <span class="badge bg-secondary">
+                            {{ service.category }}
+                        </span>
+                    </div>
+                </div>
+            </div>
+        {% empty %}
+            <p class="text-danger">No services found.</p>
+        {% endfor %}
+    </div>
+
+</div>
 
 {% endblock %}
