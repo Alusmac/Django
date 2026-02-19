@@ -1,0 +1,8 @@
+<h1>All Ads</h1>
+<ul>
+  {% for ad in ads %}
+    <li>{{ ad.title }} - {{ ad.price }} - {{ ad.category.name }}</li>
+  {% empty %}
+    <li>No ads available.</li>
+  {% endfor %}
+</ul>
