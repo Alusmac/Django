@@ -30,7 +30,7 @@ def my_ads(request: HttpRequest) -> HttpResponse:
 
 
 def recent_ads_view(request: HttpRequest) -> HttpResponse:
-    """Display a list of ads created in the last 30 days.
+    """Display a list of ads created in the last 30 days
     """
     recent_ads = Ad.objects.filter(
         created_at__gte=timezone.now() - timedelta(days=30)
