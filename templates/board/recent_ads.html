@@ -1,10 +1,65 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
+    <meta charset="UTF-8">
+    <title>Recent Ads</title>
 </head>
 <body>
-$END$
+
+    <h1>Recent Ads (Last 30 Days)</h1>
+
+    {% if ads %}
+        <ul>
+        {% for ad in ads %}
+            <li style="margin-bottom: 25px; border-bottom: 1px solid #ccc; padding-bottom: 10px;">
+
+                <h3>{{ ad.title }}</h3>
+
+                <p>
+                    <strong>Description:</strong> {{ ad.short_description }}
+                </p>
+
+                <p>
+                    <strong>Price:</strong> ${{ ad.price }}
+                </p>
+
+                <p>
+                    <strong>Category:</strong> {{ ad.category.name }}
+                </p>
+
+                <p>
+                    <strong>Posted by:</strong> {{ ad.user.username }}
+                </p>
+
+                <p>
+                    <strong>Created at:</strong> {{ ad.created_at|date:"Y-m-d H:i" }}
+                </p>
+
+                <p>
+                    <strong>Comments:</strong>
+                    {% if ad.comments_total %}
+                        {{ ad.comments_total }}
+                    {% else %}
+                        {{ ad.comments.count }}
+                    {% endif %}
+                </p>
+
+                <p>
+                    <strong>Status:</strong>
+                    {% if ad.is_active %}
+                        Active
+                    {% else %}
+                        Inactive
+                    {% endif %}
+                </p>
+
+            </li>
+        {% endfor %}
+        </ul>
+
+    {% else %}
+        <p>No recent ads found.</p>
+    {% endif %}
+
 </body>
 </html>
