@@ -1,0 +1,74 @@
+{% extends 'forms_user/base.html' %}
+
+{% block content %}
+
+<div class="row justify-content-center">
+    <div class="col-md-8">
+
+        <div class="card shadow p-4">
+
+            <div class="text-center mb-4">
+
+                {% if profile_user.userprofile.avatar %}
+                    <img src="{{ profile_user.userprofile.avatar.url }}"
+                         class="rounded-circle shadow"
+                         width="150"
+                         height="150"
+                         style="object-fit: cover;">
+                {% else %}
+                    <div class="rounded-circle bg-secondary d-flex align-items-center justify-content-center mx-auto"
+                         style="width:150px; height:150px;">
+                        <span class="text-white">No Avatar</span>
+                    </div>
+                {% endif %}
+
+                <h3 class="mt-3">
+                    {{ profile_user.username }}
+                </h3>
+
+                <p class="text-muted">
+                    {{ profile_user.email }}
+                </p>
+
+            </div>
+
+            <hr>
+
+            <div class="row">
+
+                <div class="col-md-6">
+                    <p><strong>Bio:</strong></p>
+                    <p>
+                        {{ profile_user.userprofile.bio|default:"No bio provided" }}
+                    </p>
+                </div>
+
+                <div class="col-md-6">
+                    <p><strong>Birth Date:</strong></p>
+                    <p>
+                        {{ profile_user.userprofile.birth_date|default:"Not set" }}
+                    </p>
+
+                    <p><strong>Location:</strong></p>
+                    <p>
+                        {{ profile_user.userprofile.location|default:"Not set" }}
+                    </p>
+                </div>
+
+            </div>
+
+            <div class="mt-4 text-center">
+
+                <a href="{% url 'edit_profile' %}"
+                   class="btn btn-primary">
+                    Edit Profile
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
+{% endblock %}
