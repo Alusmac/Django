@@ -18,7 +18,14 @@ from django.contrib import admin
 from django.urls import path, include, re_path
 from django.conf import settings
 from django.conf.urls.static import serve
+from rest_framework.routers import DefaultRouter
+from rest_framework.authtoken import views as auth_views
+from rest_framework_simplejwt.views import TokenObtainPairView,TokenRefreshView
+from drf_spectacular.views import SpectacularAPIView, SpectacularRedocView, SpectacularSwaggerView
+from books.views import BookViewSet
 
+router = DefaultRouter()
+router.register(r'books', BookViewSet)
 
 
 urlpatterns = [
@@ -29,6 +36,12 @@ urlpatterns = [
     path('',include('forms_user.urls')),
 
     re_path(r'^media/(?P<path>.*)$',serve,{'document_root': settings.MEDIA_ROOT}),
+    path('api/', include(router.urls)),
+    path('api/token-auth/', auth_views.obtain_auth_token),
+
+    path('api/schema/', SpectacularAPIView.as_view(), name='schema'),
+    path('swagger/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),
+    path('docs/', SpectacularRedocView.as_view(url_name='schema'), name='redoc'),
 
 
 ]
