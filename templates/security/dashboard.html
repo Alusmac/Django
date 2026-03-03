@@ -1,0 +1,14 @@
+{% extends 'security/base.html' %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+<div class="card">
+    <h2>Dashboard</h2>
+
+    <p>Вітаю, {{ user.username }} 👋</p>
+    <p>Email: {{ user.email }}</p>
+
+    <p>Ця сторінка доступна лише авторизованим користувачам.</p>
+</div>
+{% endblock %}

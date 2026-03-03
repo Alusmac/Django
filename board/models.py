@@ -1,5 +1,5 @@
 from django.db import models
-from django.contrib.auth.models import User
+from django.conf import settings
 from django.core.validators import MinValueValidator
 from django.utils import timezone
 from datetime import timedelta
@@ -8,7 +8,10 @@ from datetime import timedelta
 class Profile(models.Model):
     """User profile information
     """
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE
+    )
     phone_number = models.CharField(max_length=20)
     address = models.CharField(max_length=255)
 
@@ -49,9 +52,8 @@ class Ad(models.Model):
     is_active = models.BooleanField(default=True)
 
     user = models.ForeignKey(
-        User,
-        on_delete=models.CASCADE,
-        related_name='ads'
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE
     )
 
     category = models.ForeignKey(
@@ -94,9 +96,8 @@ class Comment(models.Model):
     )
 
     user = models.ForeignKey(
-        User,
-        on_delete=models.CASCADE,
-        related_name='comments'
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE
     )
 
     def __str__(self) -> str:

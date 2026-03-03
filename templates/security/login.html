@@ -1,0 +1,43 @@
+{% extends 'security/base.html' %}
+
+{% block title %}Login{% endblock %}
+
+{% block content %}
+
+<div class="card">
+
+    <h2 style="text-align:center;">Вхід в систему</h2>
+
+    <form method="post" novalidate>
+        {% csrf_token %}
+
+
+        {% if form.non_field_errors %}
+            <div class="errorlist">
+                {{ form.non_field_errors }}
+            </div>
+        {% endif %}
+
+
+        <div style="margin-bottom:15px;">
+            <label>Username</label><br>
+            {{ form.username }}
+            {{ form.username.errors }}
+        </div>
+
+
+        <div style="margin-bottom:15px;">
+            <label>Password</label><br>
+            {{ form.password }}
+            {{ form.password.errors }}
+        </div>
+
+        <div style="text-align:center;">
+            <button type="submit">Увійти</button>
+        </div>
+
+    </form>
+
+</div>
+
+{% endblock %}

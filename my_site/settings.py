@@ -24,7 +24,7 @@ SECRET_KEY = 'django-insecure-^9-b#*8s6h8%zwgzv3^!^=*zk)-f@ca7!qg-nq96^61@xo9cs4
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
 
 # Application definition
 
@@ -44,6 +44,8 @@ INSTALLED_APPS = [
     'django_filters',
     'drf_spectacular',
     'books',
+    'security',
+
 
 ]
 REST_FRAMEWORK = {
@@ -81,6 +83,9 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'security.middleware.AccessLogMiddleware',
+    'security.middleware.ErrorHandlingMiddleware',
+
 ]
 
 ROOT_URLCONF = 'my_site.urls'
@@ -148,3 +153,22 @@ USE_TZ = True
 STATIC_URL = 'static/'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
+
+AUTH_USER_MODEL = 'security.User'
+
+SECURE_BROWSER_XSS_FILTER = True
+X_FRAME_OPTIONS = 'DENY'
+
+SESSION_COOKIE_HTTPONLY = True
+CSRF_COOKIE_HTTPONLY = True
+
+SESSION_COOKIE_SECURE = False
+CSRF_COOKIE_SECURE = False
+
+SECURE_SSL_REDIRECT = False
+
+
+
+LOGIN_URL = '/login/'
+LOGIN_REDIRECT_URL = '/dashboard/'
+LOGOUT_REDIRECT_URL = '/login/'
