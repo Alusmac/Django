@@ -3,4 +3,6 @@ from django.db import models
 
 
 class User(AbstractUser):
+    """Custom User model extending Django's built-in AbstractUser
+    """
     email = models.EmailField(unique=True)
