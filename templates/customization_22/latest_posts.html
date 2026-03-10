@@ -1,0 +1,10 @@
+{% load customiz_tags %}
+
+<h2>Останні 5 постів:</h2>
+<ul>
+{% for post in latest_posts %}
+    <li>{{ post.title }}</li>
+{% endfor %}
+</ul>
+
+<p>Всього постів: {% total_posts %}</p>
