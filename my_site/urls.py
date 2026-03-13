@@ -44,5 +44,14 @@ urlpatterns = [
     path('api/schema/', SpectacularAPIView.as_view(), name='schema'),
     path('swagger/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),
     path('docs/', SpectacularRedocView.as_view(url_name='schema'), name='redoc'),
-    path('', include('customization_22.urls'))
+    path('', include('customization_22.urls')),
+    path('', include('sessions_23.urls')),
+
 ]
+
+if settings.DEBUG:
+    import debug_toolbar
+
+    urlpatterns = [
+                      path('__debug__/', include(debug_toolbar.urls)),
+                  ] + urlpatterns

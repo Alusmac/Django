@@ -1,0 +1,17 @@
+<h1>Порівняння продуктивності баз даних</h1>
+
+<h2>Реляційна база</h2>
+<p>Час виконання запиту: {{ time_rel }} секунд</p>
+<ul>
+{% for book in books_rel %}
+    <li>{{ book.title }} ({{ book.author.name }}) - {{ book.publication_year }}</li>
+{% endfor %}
+</ul>
+
+<h2>MongoDB</h2>
+<p>Час виконання запиту: {{ time_mongo }} секунд</p>
+<ul>
+{% for book in books_nosql %}
+    <li>{{ book.title }} ({{ book.author }}) - {{ book.publication_year }}</li>
+{% endfor %}
+</ul>

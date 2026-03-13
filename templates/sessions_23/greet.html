@@ -1,0 +1,8 @@
+<h2>Привіт, {{ name }}!</h2>
+
+<p>Вам {{ age }} років.</p>
+
+<form action="{% url 'logout' %}" method="post">
+    {% csrf_token %}
+    <button type="submit">Вийти</button>
+</form>

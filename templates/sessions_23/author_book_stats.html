@@ -1,0 +1,25 @@
+<h1>Статистика авторів та книг</h1>
+
+<h2>Середній рейтинг авторів</h2>
+<table border="1">
+<tr><th>Автор</th><th>Середній рейтинг</th></tr>
+{% for author in authors %}
+<tr>
+    <td>{{ author.name }}</td>
+    <td>{{ author.avg_rating|default:"N/A" }}</td>
+</tr>
+{% endfor %}
+</table>
+
+<h2>Книги та відгуки</h2>
+<table border="1">
+<tr><th>Книга</th><th>Автор</th><th>Середня оцінка</th><th>Кількість відгуків</th></tr>
+{% for book in books %}
+<tr>
+    <td>{{ book.title }}</td>
+    <td>{{ book.author.name }}</td>
+    <td>{{ book.avg_rating|default:"N/A" }}</td>
+    <td>{{ book.review_count }}</td>
+</tr>
+{% endfor %}
+</table>

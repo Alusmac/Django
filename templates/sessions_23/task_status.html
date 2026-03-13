@@ -1,0 +1,11 @@
+<h2>Task Status</h2>
+<p>Task ID: {{ task_id }}</p>
+<p>Status: {{ status }}</p>
+
+{% if result %}
+    <p>Result: {{ result }}</p>
+{% else %}
+    <p>Result not ready yet...</p>
+{% endif %}
+
+<a href="{% url 'import_books' %}">Back to Import Form</a>

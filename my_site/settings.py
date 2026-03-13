@@ -47,7 +47,9 @@ INSTALLED_APPS = [
     'books',
     'security',
     'testing',
-    'customization_22'
+    'customization_22',
+    'sessions_23',
+    'debug_toolbar',
 
 ]
 REST_FRAMEWORK = {
@@ -79,6 +81,7 @@ SPECTACULAR_SETTINGS = {
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -89,6 +92,7 @@ MIDDLEWARE = [
     'security.middleware.ErrorHandlingMiddleware',
     'customization_22.middleware.CustomHeaderMiddleware',
     "customization_22.middleware.RequestCounterMiddleware",
+    'sessions_23.middleware.AnonymousPageCacheMiddleware',
 
 ]
 
@@ -118,11 +122,21 @@ WSGI_APPLICATION = 'my_site.wsgi.application'
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
-}
+ 'default': {
+     'ENGINE': 'django.db.backends.sqlite3',
+     'NAME': BASE_DIR / 'db.sqlite3',
+ }
+ }
+#DATABASES = {
+#    'default': {
+#        'ENGINE': 'djongo',
+#        'NAME': 'my_mongo_db',
+#        'ENFORCE_SCHEMA': False,
+#        'CLIENT': {
+ #           'host': 'mongodb://localhost:27017',
+#        }
+#    }
+#}
 
 # Password validation
 # https://docs.djangoproject.com/en/6.0/ref/settings/#auth-password-validators
@@ -203,3 +217,25 @@ LOGGING = {
         },
     },
 }
+SESSION_ENGINE = "django.contrib.sessions.backends.db"
+
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": "redis://127.0.0.1:6379/1",
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+        }
+    }
+}
+INTERNAL_IPS = [
+    "127.0.0.1",
+    "::1",
+]
+
+CELERY_BROKER_URL = "redis://localhost:6379/0"
+CELERY_RESULT_BACKEND = "redis://localhost:6379/0"
+CELERY_ACCEPT_CONTENT = ['json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_TIMEZONE = 'UTC'

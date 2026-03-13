@@ -1,0 +1,13 @@
+<h2>Import Books from CSV</h2>
+
+<form method="post" action="{% url 'import_books' %}">
+    {% csrf_token %}
+
+    <label>CSV file path:</label>
+    <input type="text" name="file_path" placeholder="/path/to/file.csv" required>
+
+    <label>Email:</label>
+    <input type="email" name="email" placeholder="your@email.com" required>
+
+    <button type="submit">Import</button>
+</form>
