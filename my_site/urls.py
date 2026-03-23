@@ -22,6 +22,7 @@ from rest_framework.routers import DefaultRouter
 from rest_framework.authtoken import views as auth_views
 from drf_spectacular.views import SpectacularAPIView, SpectacularRedocView, SpectacularSwaggerView
 from books.views import BookViewSet
+from realtime.views import index
 
 router = DefaultRouter()
 router.register(r'books', BookViewSet)
@@ -29,6 +30,7 @@ router.register(r'books', BookViewSet)
 urlpatterns = [
 
     path('admin/', admin.site.urls),
+    path('', include('realtime.urls')),
 
     path('main/', include("main.urls")),
     path('board/', include('board.urls')),
@@ -46,6 +48,7 @@ urlpatterns = [
     path('docs/', SpectacularRedocView.as_view(url_name='schema'), name='redoc'),
     path('', include('customization_22.urls')),
     path('', include('sessions_23.urls')),
+
 
 ]
 
