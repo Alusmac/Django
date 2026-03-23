@@ -1,107 +1,82 @@
 
 <!DOCTYPE html>
-<html lang="uk">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Realtime Django WebSocket</title>
+    <title>Realtime App</title>
     <style>
-        body {
-            font-family: Arial;
-            max-width: 600px;
-            margin: 40px auto;
-        }
-        #chat, #notifications {
-            border: 1px solid #ccc;
-            padding: 10px;
-            height: 150px;
-            overflow-y: auto;
-            margin-bottom: 20px;
-        }
-        input {
-            width: 70%;
-            padding: 8px;
-        }
-        button {
-            padding: 8px 12px;
-            margin-top: 5px;
-        }
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        #chat { border: 1px solid #ccc; padding: 10px; width: 400px; height: 300px; overflow-y: scroll; }
+        #notifications { border: 1px solid #ffcc00; padding: 10px; width: 400px; height: 100px; overflow-y: scroll; margin-top: 10px; }
+        #online-count { font-weight: bold; margin-bottom: 10px; }
     </style>
 </head>
 <body>
+    <h1>Realtime App</h1>
+    <div id="online-count">Online users: 0</div>
 
-<h2>👥 Онлайн: <span id="online">0</span></h2>
+    <div id="chat"></div>
+    <input type="text" id="chat-input" placeholder="Type message..." />
+    <button id="send-chat">Send Chat</button>
 
-<h3>🔔 Notifications</h3>
-<div id="notifications"></div>
+    <div id="notifications"></div>
+    <input type="text" id="notification-input" placeholder="Notification message..." />
+    <button id="send-notification">Send Notification</button>
 
-<h3>💬 Chat</h3>
-<div id="chat"></div>
+    <script>
+        const wsScheme = window.location.protocol === "https:" ? "wss" : "ws";
+        const socket = new WebSocket(`${wsScheme}://${window.location.host}/ws/main/`);
 
-<input id="messageInput" type="text" placeholder="Введи повідомлення...">
-<br>
-<button onclick="sendMessage()">📨 Відправити повідомлення</button>
-<button onclick="sendNotification()">🔔 Notify всіх</button>
+        const onlineCountEl = document.getElementById("online-count");
+        const chatEl = document.getElementById("chat");
+        const notificationsEl = document.getElementById("notifications");
 
-<script>
-    const socket = new WebSocket("ws://127.0.0.1:8000/ws/realtime/");
+        socket.onopen = () => console.log("WebSocket connected");
 
-    socket.onopen = function() {
-        console.log("✅ WebSocket підключено");
-    };
+        socket.onmessage = (event) => {
+            const data = JSON.parse(event.data);
+            if (data.type === "online") {
+                onlineCountEl.textContent = "Online users: " + data.count;
+            } else if (data.type === "chat") {
+                const msg = document.createElement("div");
+                msg.textContent = `${data.username}: ${data.message}`;
+                chatEl.appendChild(msg);
+                chatEl.scrollTop = chatEl.scrollHeight;
+            } else if (data.type === "notification") {
+                const note = document.createElement("div");
+                note.textContent = `Notification: ${data.message}`;
+                notificationsEl.appendChild(note);
+                notificationsEl.scrollTop = notificationsEl.scrollHeight;
+            } else if (data.type === "error") {
+                alert(data.message);
+            }
+        };
 
-    socket.onmessage = function(event) {
-        const data = JSON.parse(event.data);
-        console.log("📩", data);
+        socket.onclose = (event) => console.log("WebSocket disconnected", event);
+
+        document.getElementById("send-chat").onclick = () => {
+            const input = document.getElementById("chat-input");
+            if (input.value.trim()) {
+                socket.send(JSON.stringify({ type: "chat", message: input.value }));
+                input.value = "";
+            }
+        };
+
+        document.getElementById("send-notification").onclick = () => {
+            const input = document.getElementById("notification-input");
+            if (input.value.trim()) {
+                socket.send(JSON.stringify({ type: "notification", message: input.value }));
+                input.value = "";
+            }
+        };
 
 
-        if (data.type === "online_count") {
-            document.getElementById("online").innerText = data.count;
-        }
-
-
-        if (data.type === "notification") {
-            const div = document.createElement("div");
-            div.textContent = "🔔 " + data.message;
-            document.getElementById("notifications").appendChild(div);
-        }
-
-
-        if (data.type === "chat") {
-            const div = document.createElement("div");
-            div.textContent = data.username + ": " + data.message;
-            document.getElementById("chat").appendChild(div);
-        }
-
-
-        if (data.error) {
-            alert(data.error);
-        }
-    };
-
-    socket.onclose = function() {
-        console.log("❌ WebSocket закрито");
-    };
-
-    function sendMessage() {
-        const input = document.getElementById("messageInput");
-        const message = input.value;
-
-        socket.send(JSON.stringify({
-            action: "chat",
-            message: message
-        }));
-
-        input.value = "";
-    }
-
-    function sendNotification() {
-        socket.send(JSON.stringify({
-            action: "notify",
-            message: "🔥 Нове повідомлення для всіх!"
-        }));
-    }
-</script>
-
+        document.getElementById("chat-input").addEventListener("keypress", (e) => {
+            if (e.key === "Enter") document.getElementById("send-chat").click();
+        });
+        document.getElementById("notification-input").addEventListener("keypress", (e) => {
+            if (e.key === "Enter") document.getElementById("send-notification").click();
+        });
+    </script>
 </body>
 </html>
-
